@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragmentos :: metas('Roleta do Saber')}"></th:block>
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+</head>
+<body class="pagina-jogo">
+<div th:replace="~{fragmentos :: cenario}"></div>
+
+<header class="topo">
+    <div class="topo-marca"><span class="marca-script">Roleta</span> <span class="marca-sub">DO SABER</span></div>
+    <div class="carteira">
+        <div class="carteira-item"><span class="rotulo">Saldo</span><strong id="saldo">—</strong></div>
+        <div class="carteira-item"><span class="rotulo">Experiência</span><strong id="xp">—</strong></div>
+    </div>
+    <div class="conta">
+        <span class="usuario" th:text="${usuario}">jogador</span>
+        <form th:action="@{/logout}" method="post"><button type="submit" class="botao botao-fantasma">Sair</button></form>
+    </div>
+</header>
+
+<main class="mesa">
+    <section class="area-roleta" aria-label="Roleta">
+        <div class="roleta-moldura">
+            <div id="roleta" class="roleta"></div>
+            <div th:replace="~{fragmentos :: gemas}"></div>
+        </div>
+        <p class="dica">Clique em uma fatia para escolher o prêmio que você quer ganhar.</p>
+    </section>
+
+    <aside class="painel" aria-live="polite">
+        <div class="painel-premio">
+            <span class="rotulo">Prêmio escolhido</span>
+            <strong id="premio-escolhido">Nenhum ainda</strong>
+            <span class="rotulo">Chance base: <b id="chance-atual">5%</b></span>
+        </div>
+
+        <!-- 1. Escolha do prêmio e compra do ticket -->
+        <section id="etapa-escolha" class="etapa">
+            <h2>1. Escolha e compre seu ticket</h2>
+            <label for="select-premio">Prêmio</label>
+            <select id="select-premio">
+                <option value="" disabled selected>Selecione ou clique na roleta</option>
+            </select>
+            <label for="select-categoria">Tema da pergunta</label>
+            <select id="select-categoria"></select>
+            <button id="btn-comprar" type="button" class="botao botao-principal" disabled>
+                Comprar ticket · <span id="custo-ticket">R$ 200</span>
+            </button>
+            <p class="regras">A IA cria uma pergunta de A a D. Quanto mais valioso o prêmio, mais difícil a
+                pergunta. Acertou: gira com chance maior de ganhar o prêmio escolhido. Errou: perde o ticket.</p>
+        </section>
+
+        <!-- 2. IA gerando -->
+        <section id="etapa-carregando" class="etapa" hidden>
+            <div class="carregando"><span class="spinner"></span>A IA está criando sua pergunta…</div>
+        </section>
+
+        <!-- 3. Pergunta -->
+        <section id="etapa-pergunta" class="etapa" hidden>
+            <div class="pergunta-cabecalho">
+                <span id="dificuldade" class="selo">—</span>
+                <span id="categoria-pergunta" class="selo selo-categoria">—</span>
+                <span id="timer" class="timer">60s</span>
+            </div>
+            <div class="timer-trilho"><div id="timer-barra" class="timer-barra"></div></div>
+            <p id="bonus-info" class="bonus-info"></p>
+            <h2 id="pergunta" class="pergunta"></h2>
+            <div id="alternativas" class="alternativas"></div>
+        </section>
+
+        <!-- 4. Resultado da resposta -->
+        <section id="etapa-resultado" class="etapa" hidden>
+            <h2 id="resultado-titulo" class="titulo-resultado"></h2>
+            <p id="resultado-texto"></p>
+            <p id="explicacao" class="explicacao" hidden></p>
+            <div id="medidor" class="medidor" hidden>
+                <div class="medidor-trilho">
+                    <div id="medidor-bonus" class="medidor-bonus"></div>
+                    <div id="medidor-base" class="medidor-base"></div>
+                </div>
+                <p id="medidor-texto" class="medidor-texto"></p>
+            </div>
+            <button id="btn-girar" type="button" class="botao botao-girar" hidden>GIRAR A ROLETA</button>
+            <button id="btn-nova-rodada" type="button" class="botao botao-principal" hidden>Tentar de novo</button>
+        </section>
+
+        <!-- 5. Resultado do giro -->
+        <section id="etapa-giro" class="etapa" hidden>
+            <h2 id="giro-titulo" class="titulo-resultado"></h2>
+            <p id="giro-texto" class="giro-texto"></p>
+            <button id="btn-jogar-novamente" type="button" class="botao botao-principal">Jogar novamente</button>
+        </section>
+
+        <p id="mensagem" class="mensagem" role="alert"></p>
+    </aside>
+</main>
+
+<section class="historico" aria-labelledby="titulo-historico">
+    <h2 id="titulo-historico">Histórico e meus prêmios</h2>
+    <div class="tabela-rolagem">
+        <table>
+            <thead>
+            <tr><th>Data</th><th>Prêmio escolhido</th><th>Tema</th><th>Dificuldade</th><th>Resultado</th></tr>
+            </thead>
+            <tbody id="historico-corpo"></tbody>
+        </table>
+    </div>
+    <p id="historico-vazio" class="vazio">Você ainda não jogou. Escolha um prêmio na roleta!</p>
+    <div class="paginacao">
+        <button id="pag-anterior" type="button" class="botao botao-fantasma" disabled>Anterior</button>
+        <span id="pag-info"></span>
+        <button id="pag-proxima" type="button" class="botao botao-fantasma" disabled>Próxima</button>
+    </div>
+</section>
+
+<script th:src="@{/js/cenario.js}"></script>
+<script th:src="@{/js/roleta.js}"></script>
+<script th:src="@{/js/jogo.js}"></script>
+</body>
+</html>

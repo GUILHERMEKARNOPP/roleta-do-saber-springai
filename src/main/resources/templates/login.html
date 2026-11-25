@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragmentos :: metas('Entrar · Roleta do Saber')}"></th:block>
+</head>
+<body class="pagina-acesso">
+<div th:replace="~{fragmentos :: cenario}"></div>
+
+<main class="cartao-acesso">
+    <div class="marca">
+        <span class="marca-estrelas">✦ ✦ ✦</span>
+        <span class="marca-script">Roleta</span>
+        <span class="marca-sub">DO SABER</span>
+    </div>
+    <p class="chamada">Acerte a pergunta da IA, aumente sua chance e gire a roleta.</p>
+
+    <div th:if="${param.erro}" class="alerta erro">Usuário ou senha inválidos.</div>
+    <div th:if="${param.bloqueado}" class="alerta erro">Muitas tentativas. Aguarde 15 minutos e tente de novo.</div>
+    <div th:if="${param.cadastrado}" class="alerta sucesso">Conta criada! Você ganhou R$ 1.000 para jogar. Entre abaixo.</div>
+    <div th:if="${param.saiu}" class="alerta info">Você saiu da sua conta.</div>
+
+    <form th:action="@{/login}" method="post" class="formulario">
+        <label for="username">Usuário</label>
+        <input id="username" name="username" type="text" autocomplete="username" required maxlength="30" autofocus>
+
+        <label for="password">Senha</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required maxlength="72">
+
+        <button type="submit" class="botao botao-principal">Entrar</button>
+    </form>
+    <p class="rodape-acesso">Novo por aqui? <a th:href="@{/cadastro}">Crie sua conta</a></p>
+</main>
+
+<script th:src="@{/js/cenario.js}"></script>
+</body>
+</html>

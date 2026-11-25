@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:fragment="metas(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${titulo}">Roleta do Saber</title>
+    <link rel="icon" th:href="@{/img/favicon.svg}" type="image/svg+xml">
+    <link rel="stylesheet" th:href="@{/css/estilo.css}">
+</th:block>
+</head>
+<body>
+
+<!-- Cenário de fundo: pilares de mármore e cristais flutuantes -->
+<div th:fragment="cenario" class="cenario" aria-hidden="true">
+    <div class="brilho-fundo"></div>
+    <div class="pilar pilar-esquerdo"></div>
+    <div class="pilar pilar-direito"></div>
+    <div class="cristais"></div>
+    <div class="piso"></div>
+</div>
+
+<!-- Gemas iluminadas na base da roleta -->
+<svg th:fragment="gemas" class="gemas" viewBox="0 0 900 260" aria-hidden="true" focusable="false">
+    <defs>
+        <radialGradient id="gema-luz" cx="50%" cy="35%" r="70%">
+            <stop offset="0" stop-color="#ffffff"/>
+            <stop offset="0.6" stop-color="#dff1ff"/>
+            <stop offset="1" stop-color="#9cc9f2"/>
+        </radialGradient>
+        <g id="gema">
+            <path class="gema-corpo" d="M60,0 L140,0 L200,40 L100,140 L0,40 Z"/>
+            <path class="gema-faceta" d="M0,40 L200,40 M60,0 L40,40 M60,0 L80,40 M100,0 L80,40 M100,0 L120,40
+                     M140,0 L120,40 M140,0 L160,40 M40,40 L100,140 M80,40 L100,140 M120,40 L100,140 M160,40 L100,140"/>
+        </g>
+    </defs>
+    <g>
+        <use href="#gema" transform="translate(40,110) rotate(-28 100 70) scale(1.15)"/>
+        <use href="#gema" transform="translate(170,150) rotate(12 100 70) scale(0.7)"/>
+        <use href="#gema" transform="translate(-10,175) rotate(-8 100 70) scale(0.55)"/>
+        <use href="#gema" transform="translate(600,95) rotate(24 100 70) scale(1.25)"/>
+        <use href="#gema" transform="translate(520,160) rotate(-14 100 70) scale(0.75)"/>
+        <use href="#gema" transform="translate(770,170) rotate(10 100 70) scale(0.6)"/>
+    </g>
+</svg>
+
+</body>
+</html>
