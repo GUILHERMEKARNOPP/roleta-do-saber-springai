@@ -44,7 +44,7 @@ import br.com.roleta.web.RegraDoJogoException;
 class JogoServiceTest {
 
     private static final int PREMIO_R15_MIL = 2;
-    private static final int PREMIO_XP = 1;
+    private static final int PREMIO_BONUS_500 = 1;
     private static final int PREMIO_CARRO = 18;
 
     @TestConfiguration
@@ -111,13 +111,13 @@ class JogoServiceTest {
     void naoPermiteGirarDuasVezesNaMesmaRodada() {
         RodadaView rodada = jogoService.comprarTicket(jogadorId, PREMIO_CARRO, Categoria.HISTORIA);
         jogoService.responder(jogadorId, rodada.id(), "B");
-        when(sorteador.sortear(eq(PREMIO_CARRO), anyInt(), anyInt())).thenReturn(PREMIO_XP);
+        when(sorteador.sortear(eq(PREMIO_CARRO), anyInt(), anyInt())).thenReturn(PREMIO_BONUS_500);
 
         jogoService.girar(jogadorId, rodada.id());
 
         assertThatThrownBy(() -> jogoService.girar(jogadorId, rodada.id()))
                 .isInstanceOf(RegraDoJogoException.class);
-        assertThat(usuarios.findById(jogadorId).orElseThrow().getXp()).isEqualTo(2_000);
+        assertThat(saldo(jogadorId)).as("bônus creditado uma única vez").isEqualByComparingTo("1300");
     }
 
     @Test

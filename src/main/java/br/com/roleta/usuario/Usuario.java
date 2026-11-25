@@ -27,9 +27,6 @@ public class Usuario {
     @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal saldo;
 
-    @Column(nullable = false)
-    private long xp;
-
     @Column(name = "criado_em", nullable = false)
     private Instant criadoEm;
 
@@ -57,10 +54,6 @@ public class Usuario {
 
     public BigDecimal getSaldo() {
         return saldo;
-    }
-
-    public long getXp() {
-        return xp;
     }
 
     public Instant getCriadoEm() {

@@ -1,5 +1,7 @@
 package br.com.roleta.usuario;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import br.com.roleta.jogo.Premio;
+import br.com.roleta.jogo.TabelaPremios;
 import br.com.roleta.web.RegraDoJogoException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -17,11 +21,19 @@ public class AuthController {
 
     private final CadastroService cadastroService;
     private final LimitadorTentativas limitadorCadastro;
+    private final TabelaPremios tabelaPremios;
 
     public AuthController(CadastroService cadastroService,
-            @Qualifier("limitadorCadastro") LimitadorTentativas limitadorCadastro) {
+            @Qualifier("limitadorCadastro") LimitadorTentativas limitadorCadastro, TabelaPremios tabelaPremios) {
         this.cadastroService = cadastroService;
         this.limitadorCadastro = limitadorCadastro;
+        this.tabelaPremios = tabelaPremios;
+    }
+
+    /** Prêmios para desenhar a roleta decorativa do fundo das telas de acesso. */
+    @ModelAttribute("premios")
+    public List<Premio> premios() {
+        return tabelaPremios.todos();
     }
 
     @GetMapping("/login")

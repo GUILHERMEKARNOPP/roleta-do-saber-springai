@@ -25,8 +25,4 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("update Usuario u set u.saldo = u.saldo + :valor where u.id = :id")
     int creditar(@Param("id") Long id, @Param("valor") BigDecimal valor);
-
-    @Modifying(clearAutomatically = true, flushAutomatically = true)
-    @Query("update Usuario u set u.xp = u.xp + :xp where u.id = :id")
-    int adicionarXp(@Param("id") Long id, @Param("xp") long xp);
 }

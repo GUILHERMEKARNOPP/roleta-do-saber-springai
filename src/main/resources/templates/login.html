@@ -6,31 +6,51 @@
 <body class="pagina-acesso">
 <div th:replace="~{fragmentos :: cenario}"></div>
 
-<main class="cartao-acesso">
-    <div class="marca">
-        <span class="marca-estrelas">✦ ✦ ✦</span>
-        <span class="marca-script">Roleta</span>
-        <span class="marca-sub">DO SABER</span>
+<div class="hud hud-esquerda">
+    <p class="hud-ajuda">Entre na sua conta para jogar. Novos jogadores ganham R$ 1.000.</p>
+</div>
+
+<div class="palco" aria-hidden="true">
+    <div class="roleta-moldura">
+        <div id="roleta-decorativa" class="roleta roleta-decorativa"></div>
+        <th:block th:replace="~{fragmentos :: base-roleta}"></th:block>
     </div>
-    <p class="chamada">Acerte a pergunta da IA, aumente sua chance e gire a roleta.</p>
+</div>
+<ul id="premios-decorativos" hidden>
+    <li th:each="p : ${premios}" th:data-tipo="${p.tipo}" th:text="${p.rotulo}"></li>
+</ul>
 
-    <div th:if="${param.erro}" class="alerta erro">Usuário ou senha inválidos.</div>
-    <div th:if="${param.bloqueado}" class="alerta erro">Muitas tentativas. Aguarde 15 minutos e tente de novo.</div>
-    <div th:if="${param.cadastrado}" class="alerta sucesso">Conta criada! Você ganhou R$ 1.000 para jogar. Entre abaixo.</div>
-    <div th:if="${param.saiu}" class="alerta info">Você saiu da sua conta.</div>
+<main class="menu">
+    <header class="menu-banner">
+        <span class="marca-script">Roleta</span>
+        <span class="marca-sub">do Saber</span>
+    </header>
+    <nav class="menu-abas">
+        <a class="aba ativa" th:href="@{/login}" aria-current="page">Entrar</a>
+        <a class="aba" th:href="@{/cadastro}">Criar conta</a>
+    </nav>
 
-    <form th:action="@{/login}" method="post" class="formulario">
-        <label for="username">Usuário</label>
-        <input id="username" name="username" type="text" autocomplete="username" required maxlength="30" autofocus>
+    <p th:if="${param.erro}" class="menu-mensagem">Usuário ou senha inválidos.</p>
+    <p th:if="${param.bloqueado}" class="menu-mensagem">Muitas tentativas. Aguarde 15 minutos e tente de novo.</p>
+    <p th:if="${param.cadastrado}" class="menu-mensagem sucesso">Conta criada! Você ganhou R$ 1.000. Entre abaixo.</p>
+    <p th:if="${param.saiu}" class="menu-mensagem info">Você saiu da sua conta.</p>
 
-        <label for="password">Senha</label>
-        <input id="password" name="password" type="password" autocomplete="current-password" required maxlength="72">
-
-        <button type="submit" class="botao botao-principal">Entrar</button>
+    <form th:action="@{/login}" method="post">
+        <label class="linha linha-campo">
+            <span>Usuário</span>
+            <input name="username" type="text" autocomplete="username" required maxlength="30" autofocus>
+        </label>
+        <label class="linha linha-campo">
+            <span>Senha</span>
+            <input name="password" type="password" autocomplete="current-password" required maxlength="72">
+        </label>
+        <button type="submit" class="linha linha-acao"><span>Entrar</span><b>›</b></button>
     </form>
-    <p class="rodape-acesso">Novo por aqui? <a th:href="@{/cadastro}">Crie sua conta</a></p>
+    <p class="menu-descricao">Acerte a pergunta da IA, aumente sua chance e gire a roleta.</p>
 </main>
 
 <script th:src="@{/js/cenario.js}"></script>
+<script th:src="@{/js/roleta.js}"></script>
+<script th:src="@{/js/acesso.js}"></script>
 </body>
 </html>

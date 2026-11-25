@@ -5,8 +5,8 @@ public enum TipoPremio {
     DINHEIRO,
     /** Fichas: convertidas em reais no saldo. */
     FICHAS,
-    /** Pontos de experiência do jogador. */
-    XP,
+    /** Bônus em reais no saldo. */
+    BONUS,
     /** Item colecionável (vai para "Meus prêmios"). */
     ROUPA,
     /** Item colecionável (vai para "Meus prêmios"). */

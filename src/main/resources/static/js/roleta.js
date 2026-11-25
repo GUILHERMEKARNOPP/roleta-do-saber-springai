@@ -34,7 +34,7 @@
   /* Ícones desenhados em coordenadas locais (~48x48), "para cima" = para fora da roleta. */
   const ICONES = {
     DINHEIRO: () => el('text', { class: 'icone-texto', 'font-size': 46, y: 2 }, [document.createTextNode('$')]),
-    XP: () => el('text', { class: 'icone-texto', 'font-size': 30, y: 2 }, [document.createTextNode('XP')]),
+    BONUS: () => el('text', { class: 'icone-texto', 'font-size': 30, y: 2 }, [document.createTextNode('R$')]),
     FICHAS: () => el('g', { class: 'icone-linha' }, [-11, 0, 11].map((x) =>
       el('ellipse', { cx: x, cy: 0, rx: 8, ry: 16 }))),
     ROUPA: () => el('path', {
@@ -76,7 +76,7 @@
     switch (premio.tipo) {
       case 'DINHEIRO': return premio.rotulo.toUpperCase();
       case 'FICHAS': return premio.rotulo.split(' ')[0];
-      case 'XP': return premio.rotulo.replace(' XP', '');
+      case 'BONUS': return premio.rotulo.replace('Bônus de R$ ', '');
       case 'ROUPA': return 'ROUPA';
       case 'VEICULO': return 'VEÍCULO';
       case 'TICKET': return '2 TICKETS';
@@ -101,7 +101,9 @@
     ]);
   }
 
+  /** aoSelecionar = null cria uma roleta só decorativa (sem clique). */
   function criar(container, premios, aoSelecionar) {
+    const interativa = typeof aoSelecionar === 'function';
     const passo = 360 / premios.length;
     const svg = el('svg', {
       viewBox: '-258 -276 516 534', class: 'roleta-svg', role: 'group',
@@ -115,10 +117,10 @@
     const fatias = premios.map((premio, i) => {
       const inicio = i * passo;
       const centro = inicio + passo / 2;
-      const grupo = el('g', {
+      const grupo = el('g', interativa ? {
         class: 'fatia', tabindex: 0, role: 'button', 'data-indice': i,
         'aria-label': 'Escolher prêmio ' + premio.rotulo
-      });
+      } : { class: 'fatia', 'data-indice': i });
       grupo.appendChild(el('path', { class: 'fatia-fundo', d: caminhoFatia(inicio, inicio + passo),
         fill: i % 2 === 0 ? 'url(#fatia-a)' : 'url(#fatia-b)' }));
       const icone = ICONES[premio.tipo] ? ICONES[premio.tipo]() : el('g');
@@ -129,11 +131,13 @@
         transform: `rotate(${centro}) translate(0,${-RAIO_TEXTO}) rotate(-90)`
       }, [document.createTextNode(texto)]));
       grupo.appendChild(el('title', {}, [document.createTextNode(premio.rotulo)]));
-      const selecionar = () => aoSelecionar(i);
-      grupo.addEventListener('click', selecionar);
-      grupo.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selecionar(); }
-      });
+      if (interativa) {
+        const selecionar = () => aoSelecionar(i);
+        grupo.addEventListener('click', selecionar);
+        grupo.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selecionar(); }
+        });
+      }
       disco.appendChild(grupo);
       return grupo;
     });
@@ -162,6 +166,7 @@
     ]);
     svg.appendChild(centro);
     svg.appendChild(el('polygon', { class: 'ponteiro', points: '-15,-268 15,-268 0,-222', filter: 'url(#brilho-aro)' }));
+    if (!interativa) svg.classList.add('travada');
     container.appendChild(svg);
 
     let rotacaoAtual = 0;

@@ -48,7 +48,6 @@ public final class JogoDto {
     public record EstadoJogo(
             String usuario,
             BigDecimal saldo,
-            long xp,
             BigDecimal custoTicket,
             int chanceBase,
             long prazoRespostaSegundos,
@@ -71,8 +70,7 @@ public final class JogoDto {
             int premioSorteado,
             String descricaoGanho,
             boolean ganhouPremioEscolhido,
-            BigDecimal saldo,
-            long xp) {
+            BigDecimal saldo) {
     }
 
     public record HistoricoItem(

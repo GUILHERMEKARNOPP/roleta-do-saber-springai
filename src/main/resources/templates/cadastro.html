@@ -6,38 +6,57 @@
 <body class="pagina-acesso">
 <div th:replace="~{fragmentos :: cenario}"></div>
 
-<main class="cartao-acesso">
-    <div class="marca">
-        <span class="marca-estrelas">✦ ✦ ✦</span>
-        <span class="marca-script">Roleta</span>
-        <span class="marca-sub">DO SABER</span>
+<div class="hud hud-esquerda">
+    <p class="hud-ajuda">Crie sua conta: você começa com R$ 1.000 e cada ticket custa R$ 200.</p>
+</div>
+
+<div class="palco" aria-hidden="true">
+    <div class="roleta-moldura">
+        <div id="roleta-decorativa" class="roleta roleta-decorativa"></div>
+        <th:block th:replace="~{fragmentos :: base-roleta}"></th:block>
     </div>
-    <p class="chamada">Crie sua conta e comece com <strong>R$ 1.000</strong>. Cada ticket custa R$ 200.</p>
+</div>
+<ul id="premios-decorativos" hidden>
+    <li th:each="p : ${premios}" th:data-tipo="${p.tipo}" th:text="${p.rotulo}"></li>
+</ul>
 
-    <div th:if="${erroGeral}" class="alerta erro" th:text="${erroGeral}"></div>
+<main class="menu">
+    <header class="menu-banner">
+        <span class="marca-script">Roleta</span>
+        <span class="marca-sub">do Saber</span>
+    </header>
+    <nav class="menu-abas">
+        <a class="aba" th:href="@{/login}">Entrar</a>
+        <a class="aba ativa" th:href="@{/cadastro}" aria-current="page">Criar conta</a>
+    </nav>
 
-    <form th:action="@{/cadastro}" th:object="${form}" method="post" class="formulario" novalidate>
-        <label for="username">Usuário</label>
-        <input id="username" th:field="*{username}" type="text" autocomplete="username" required
-               maxlength="30" pattern="[a-zA-Z0-9_.]{3,30}">
-        <small class="erro-campo" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></small>
+    <p th:if="${erroGeral}" class="menu-mensagem" th:text="${erroGeral}"></p>
 
-        <label for="senha">Senha</label>
-        <input id="senha" th:field="*{senha}" type="password" autocomplete="new-password" required
-               minlength="8" maxlength="72">
-        <small class="erro-campo" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></small>
-
-        <label for="confirmacaoSenha">Confirme a senha</label>
-        <input id="confirmacaoSenha" th:field="*{confirmacaoSenha}" type="password" autocomplete="new-password"
-               required minlength="8" maxlength="72">
-        <small class="erro-campo" th:if="${#fields.hasErrors('confirmacaoSenha')}"
-               th:errors="*{confirmacaoSenha}"></small>
-
-        <button type="submit" class="botao botao-principal">Criar conta</button>
+    <form th:action="@{/cadastro}" th:object="${form}" method="post" novalidate>
+        <label class="linha linha-campo">
+            <span>Usuário</span>
+            <input th:field="*{username}" type="text" autocomplete="username" required maxlength="30"
+                   pattern="[a-zA-Z0-9_.]{3,30}">
+        </label>
+        <p class="menu-mensagem" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+        <label class="linha linha-campo">
+            <span>Senha</span>
+            <input th:field="*{senha}" type="password" autocomplete="new-password" required minlength="8" maxlength="72">
+        </label>
+        <p class="menu-mensagem" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></p>
+        <label class="linha linha-campo">
+            <span>Confirmar senha</span>
+            <input th:field="*{confirmacaoSenha}" type="password" autocomplete="new-password" required minlength="8"
+                   maxlength="72">
+        </label>
+        <p class="menu-mensagem" th:if="${#fields.hasErrors('confirmacaoSenha')}" th:errors="*{confirmacaoSenha}"></p>
+        <button type="submit" class="linha linha-acao"><span>Criar conta</span><b>›</b></button>
     </form>
-    <p class="rodape-acesso">Já tem conta? <a th:href="@{/login}">Entrar</a></p>
+    <p class="menu-descricao">Usuário: 3 a 30 caracteres (letras, números, ponto ou _). Senha: mínimo de 8 caracteres.</p>
 </main>
 
 <script th:src="@{/js/cenario.js}"></script>
+<script th:src="@{/js/roleta.js}"></script>
+<script th:src="@{/js/acesso.js}"></script>
 </body>
 </html>

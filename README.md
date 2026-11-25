@@ -9,7 +9,7 @@ múltipla escolha (A, B, C, D) criada pela IA. Se acertar, ganha o direito de gi
 ## Funcionalidades
 
 - **Cadastro e login** de usuários (senha com hash BCrypt). Todo usuário novo começa com **R$ 1.000**.
-- **Roleta interativa** com 20 prêmios (dinheiro, fichas, XP, roupas, veículo, tickets e prêmio mistério).
+- **Roleta interativa** com 20 prêmios (dinheiro, fichas, bônus, roupas, veículo, tickets e prêmio mistério).
 - **Ticket de R$ 200** por tentativa.
 - **Pergunta gerada pela IA** (GenAI via Spring AI), com tema escolhido pelo jogador.
 - **A IA decide a dificuldade** (Fácil, Médio, Difícil, Muito difícil) com base no valor do prêmio escolhido

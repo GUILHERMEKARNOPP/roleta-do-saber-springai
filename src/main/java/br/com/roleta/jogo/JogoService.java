@@ -76,7 +76,7 @@ public class JogoService {
     public EstadoJogo estado(Long usuarioId) {
         Usuario usuario = buscarUsuario(usuarioId);
         RodadaView rodadaAtual = buscarRodadaAberta(usuarioId).map(this::paraView).orElse(null);
-        return new EstadoJogo(usuario.getUsername(), usuario.getSaldo(), usuario.getXp(), CUSTO_TICKET,
+        return new EstadoJogo(usuario.getUsername(), usuario.getSaldo(), CUSTO_TICKET,
                 chanceBase(), PRAZO_RESPOSTA.toSeconds(),
                 tabela.todos().stream().map(p -> new PremioView(p.indice(), p.tipo(), p.rotulo())).toList(),
                 Arrays.stream(Categoria.values()).map(c -> new CategoriaView(c, c.getNome())).toList(),
@@ -143,7 +143,7 @@ public class JogoService {
         aplicarEntrega(usuarioId, premio, entrega);
         Usuario usuario = buscarUsuario(usuarioId);
         return new ResultadoGiro(sorteado, entrega.descricao(), sorteado == rodada.getPremioAlvo(),
-                usuario.getSaldo(), usuario.getXp());
+                usuario.getSaldo());
     }
 
     @Transactional(readOnly = true)
@@ -203,7 +203,7 @@ public class JogoService {
                 BigDecimal valor = BigDecimal.valueOf(sorteador.valorMisterio());
                 yield new Entrega(valor, "Mistério revelado: " + reais(valor) + " no saldo");
             }
-            case XP -> new Entrega(premio.valor(), "+" + premio.rotulo());
+            case BONUS -> new Entrega(premio.valor(), premio.rotulo() + " no saldo");
             case ROUPA, VEICULO -> new Entrega(premio.valorReferencia(),
                     premio.rotulo() + " adicionado aos seus prêmios");
         };
@@ -211,8 +211,7 @@ public class JogoService {
 
     private void aplicarEntrega(Long usuarioId, Premio premio, Entrega entrega) {
         switch (premio.tipo()) {
-            case DINHEIRO, FICHAS, TICKET, MISTERIO -> usuarios.creditar(usuarioId, entrega.valor());
-            case XP -> usuarios.adicionarXp(usuarioId, entrega.valor().longValue());
+            case DINHEIRO, FICHAS, TICKET, MISTERIO, BONUS -> usuarios.creditar(usuarioId, entrega.valor());
             case ROUPA, VEICULO -> {
                 // Itens ficam registrados na própria rodada (histórico de prêmios).
             }
