@@ -76,6 +76,11 @@ export OPENROUTER_API_KEY="sk-or-sua-chave-aqui"
 
 ### 3. Suba a aplicação
 
+**Jeito mais fácil (Windows):** dê dois cliques em **`rodar.bat`**. Ele lê a chave salva, sobe o sistema e
+abre o navegador sozinho. Para usar outra porta: `rodar.bat 8085`.
+
+Ou pelo terminal:
+
 ```bash
 ./mvnw spring-boot:run        # Linux/macOS/Git Bash
 mvnw.cmd spring-boot:run      # Windows (cmd/PowerShell)
