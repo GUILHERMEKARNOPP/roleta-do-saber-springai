@@ -184,7 +184,12 @@
       try {
         const novo = await api('GET', '/api/estado');
         atualizarCarteira(novo.saldo);
-        mostrarResultado({ acertou: false, tempoEsgotado: true, respostaCorreta: null, explicacao: null });
+        const base = novo.chanceBase;
+        if (novo.rodadaAtual) rodadaAtual = novo.rodadaAtual;
+        mostrarResultado({
+          acertou: false, tempoEsgotado: true, respostaCorreta: null, explicacao: null,
+          chanceBase: base, chanceFinal: base
+        });
         carregarHistorico(0);
       } catch (e) {
         mostrarMensagem(e.message);
@@ -246,12 +251,13 @@
     } else {
       ui.resultadoTitulo.textContent = resultado.tempoEsgotado ? 'Tempo esgotado!' : 'Resposta errada!';
       ui.resultadoTitulo.className = 'menu-titulo falha';
-      ui.resultadoTexto.textContent = 'Você perdeu ' + moeda.format(estado.custoTicket) + ' do ticket.' +
-        (resultado.respostaCorreta ? ' A resposta certa era a letra ' + resultado.respostaCorreta + '.' : '');
-      ui.medidor.hidden = true;
-      ui.btnGirar.hidden = true;
-      ui.btnNovaRodada.hidden = false;
-      ajuda('Você perdeu o ticket. Escolha um prêmio e tente de novo.');
+      ui.resultadoTexto.textContent =
+        (resultado.respostaCorreta ? 'A resposta certa era a letra ' + resultado.respostaCorreta + '. ' : '') +
+        'Você ainda gira a roleta e ganha um prêmio, mas sem o bônus de chance.';
+      mostrarMedidor(resultado.chanceBase, resultado.chanceFinal);
+      ui.btnGirar.hidden = false;
+      ui.btnNovaRodada.hidden = true;
+      ajuda('Clique em GIRAR A ROLETA.');
     }
     mostrarEtapa(ui.etapaResultado);
   }
@@ -264,7 +270,7 @@
       ui.medidorBonus.style.transform = 'scaleX(' + final / 100 + ')';
     }));
     ui.medidorTexto.textContent = 'Chance de ganhar "' + estado.premios[premioSelecionado].rotulo + '": ' +
-      base + '% → ' + final + '%';
+      (final > base ? base + '% → ' + final + '%' : base + '% (sem bônus)');
   }
 
   async function girar() {
@@ -360,7 +366,8 @@
       roleta.destacar(rodada.premioAlvo);
       ui.premioNome.textContent = estado.premios[rodada.premioAlvo].rotulo;
       mostrarResultado({ acertou: true, chanceBase: rodada.chanceBase, chanceFinal: rodada.chanceFinal });
-      ui.resultadoTexto.textContent = 'Você já acertou a pergunta. Gire a roleta!';
+      ui.resultadoTitulo.textContent = 'Sua rodada está pronta';
+      ui.resultadoTexto.textContent = 'Você já respondeu a pergunta. Gire a roleta!';
     } else {
       mostrarEtapa(ui.etapaEscolha);
     }

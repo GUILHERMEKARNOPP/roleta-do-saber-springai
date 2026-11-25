@@ -117,15 +117,14 @@ public class JogoService {
         }
         Instant agora = clock.instant();
         if (prazoEsgotado(rodada, agora)) {
-            rodada.registrarTempoEsgotado(agora);
+            rodada.registrarTempoEsgotado(chanceBase(), agora);
         } else if (rodada.getRespostaCorreta().equals(alternativa)) {
             int chanceFinal = Math.min(chanceBase() + rodada.getBonusChance(), CHANCE_MAXIMA);
             rodada.registrarAcerto(alternativa, chanceFinal, agora);
         } else {
-            rodada.registrarErro(alternativa, agora);
+            rodada.registrarErro(alternativa, chanceBase(), agora);
         }
-        boolean acertou = rodada.getStatus() == StatusRodada.LIBERADA_PARA_GIRO;
-        return new ResultadoResposta(acertou, rodada.isTempoEsgotado(), rodada.getRespostaCorreta(),
+        return new ResultadoResposta(rodada.acertou(), rodada.isTempoEsgotado(), rodada.getRespostaCorreta(),
                 rodada.getExplicacao(), chanceBase(), rodada.getChanceFinal(), buscarUsuario(usuarioId).getSaldo());
     }
 
@@ -133,7 +132,7 @@ public class JogoService {
     public ResultadoGiro girar(Long usuarioId, Long rodadaId) {
         Rodada rodada = buscarRodadaDoUsuario(usuarioId, rodadaId);
         if (rodada.getStatus() != StatusRodada.LIBERADA_PARA_GIRO) {
-            throw new RegraDoJogoException("Você precisa acertar a pergunta antes de girar a roleta.");
+            throw new RegraDoJogoException("Responda a pergunta antes de girar a roleta.");
         }
         int sorteado = sorteador.sortear(rodada.getPremioAlvo(), rodada.getChanceFinal(), tabela.quantidade());
         Premio premio = tabela.porIndice(sorteado);
@@ -164,15 +163,14 @@ public class JogoService {
         return rodadas.perguntasRecentes(usuarioId, PageRequest.of(0, PERGUNTAS_RECENTES_PARA_IA));
     }
 
-    /** Rodada em aberto do jogador; se a pergunta passou do prazo, encerra como erro. */
+    /** Rodada em aberto do jogador; se a pergunta passou do prazo, libera o giro sem bônus. */
     private Optional<Rodada> buscarRodadaAberta(Long usuarioId) {
         Optional<Rodada> aberta = rodadas.findFirstByUsuarioIdAndStatusInOrderByCriadaEmDesc(usuarioId,
                 STATUS_ABERTOS);
         Instant agora = clock.instant();
         if (aberta.isPresent() && aberta.get().getStatus() == StatusRodada.AGUARDANDO_RESPOSTA
                 && prazoEsgotado(aberta.get(), agora)) {
-            aberta.get().registrarTempoEsgotado(agora);
-            return Optional.empty();
+            aberta.get().registrarTempoEsgotado(chanceBase(), agora);
         }
         return aberta;
     }
@@ -231,11 +229,12 @@ public class JogoService {
     private HistoricoItem paraHistorico(Rodada rodada) {
         String resultado = switch (rodada.getStatus()) {
             case AGUARDANDO_RESPOSTA -> "Aguardando resposta";
-            case LIBERADA_PARA_GIRO -> "Acertou! Falta girar";
+            case LIBERADA_PARA_GIRO -> rodada.acertou() ? "Acertou! Falta girar" : "Errou. Falta girar";
             case ERROU -> rodada.isTempoEsgotado()
                     ? "Tempo esgotado (-" + reais(rodada.getCustoTicket()) + ")"
                     : "Errou (-" + reais(rodada.getCustoTicket()) + ")";
-            case GIRADA -> rodada.getDescricaoGanho();
+            case GIRADA -> rodada.acertou() ? rodada.getDescricaoGanho()
+                    : rodada.getDescricaoGanho() + " (errou, sem bônus)";
         };
         return new HistoricoItem(rodada.getId(), rodada.getCriadaEm(),
                 tabela.porIndice(rodada.getPremioAlvo()).rotulo(), rodada.getCategoria().getNome(),

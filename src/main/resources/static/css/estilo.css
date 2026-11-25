@@ -46,6 +46,19 @@ a { color: inherit; }
   position: relative; z-index: 1;
   -webkit-box-reflect: below -36px linear-gradient(transparent 74%, rgba(255, 255, 255, 0.2));
 }
+.gemas {
+  position: absolute; z-index: 2; left: -17%; width: 134%; bottom: -14%; height: auto;
+  pointer-events: none; overflow: visible;
+  filter: drop-shadow(0 0 16px rgba(190, 225, 255, 0.85)) drop-shadow(0 0 4px rgba(255, 255, 255, 0.9));
+}
+.gema-corpo { fill: url(#gema-luz); stroke: #2f4f78; stroke-width: 3.2; }
+.gema-faceta { fill: none; stroke: #2f4f78; stroke-width: 2.6; }
+
+/* Ponteiro "batendo" nos pinos durante o giro */
+body.girando .ponteiro { animation: tique 0.11s ease-in-out infinite alternate; }
+@keyframes tique { from { transform: rotate(-7deg); } to { transform: rotate(7deg); } }
+.ponteiro { transform-box: fill-box; transform-origin: 50% 0%; }
+
 /* ================= Roleta (SVG) ================= */
 .roleta-svg { display: block; width: 100%; height: auto; overflow: visible; user-select: none; }
 .disco { will-change: transform; }
@@ -272,6 +285,7 @@ body.girando .menu { opacity: 0.75; }
   .fundo { background: radial-gradient(ellipse 70% 40% at 50% 30%, rgba(70, 150, 255, 0.28), transparent 70%), #05070c; }
   .palco { min-height: auto; padding: 120px 16px 90px; }
   .roleta-moldura { width: min(88vw, 520px); }
+  .gemas { left: -6%; width: 112%; }
   .menu { position: relative; left: auto; top: auto; width: auto; max-height: none; margin: 0 16px 32px; }
   .hud { position: absolute; }
   .hud-saldo { font-size: 26px; }

@@ -4,7 +4,8 @@ Sistema web de **roleta de prêmios com perguntas geradas por IA**, desenvolvido
 
 O jogador escolhe o prêmio que quer ganhar na roleta, compra um ticket e responde a uma pergunta de
 múltipla escolha (A, B, C, D) criada pela IA. Se acertar, ganha o direito de girar a roleta com uma
-**chance maior** de cair no prêmio escolhido. Se errar, perde o valor do ticket.
+**chance maior** de cair no prêmio escolhido. Se errar, ainda gira a roleta e ganha algum prêmio, mas sem
+o bônus de chance.
 
 ## Funcionalidades
 

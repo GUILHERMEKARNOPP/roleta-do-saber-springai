@@ -31,6 +31,7 @@
 <main class="palco">
     <div class="roleta-moldura">
         <div id="roleta" class="roleta"></div>
+        <th:block th:replace="~{fragmentos :: diamantes}"></th:block>
     </div>
 </main>
 
@@ -63,7 +64,8 @@
                 <span>Comprar ticket</span><b id="custo-ticket">R$ 200</b>
             </button>
             <p class="menu-descricao">A IA faz uma pergunta de A a D. Quanto mais valioso o prêmio, mais difícil a
-                pergunta. Acertou: você gira com mais chance de ganhar o prêmio escolhido. Errou: perde o ticket.</p>
+                pergunta. Acertou: você gira com mais chance de ganhar o prêmio escolhido. Errou: gira do mesmo jeito,
+                mas sem o bônus. Sempre sai algum prêmio.</p>
         </section>
 
         <section id="etapa-carregando" class="etapa" hidden>

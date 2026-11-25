@@ -14,5 +14,30 @@
 <!-- Fundo: só um brilho azul atrás da roleta -->
 <div th:fragment="cenario" class="fundo" aria-hidden="true"></div>
 
+<!-- Diamantes iluminados dos lados da roleta -->
+<th:block th:fragment="diamantes">
+    <svg class="gemas" viewBox="0 0 1000 300" aria-hidden="true" focusable="false">
+        <defs>
+            <radialGradient id="gema-luz" cx="45%" cy="35%" r="75%">
+                <stop offset="0" stop-color="#ffffff"/>
+                <stop offset="0.55" stop-color="#e6f4ff"/>
+                <stop offset="1" stop-color="#a9d2f5"/>
+            </radialGradient>
+            <g id="gema">
+                <path class="gema-corpo" d="M60,0 L140,0 L200,40 L100,140 L0,40 Z"/>
+                <path class="gema-faceta" d="M0,40 L200,40 M60,0 L40,40 M60,0 L80,40 M100,0 L80,40 M100,0 L120,40
+                         M140,0 L120,40 M140,0 L160,40 M40,40 L100,140 M80,40 L100,140 M120,40 L100,140 M160,40 L100,140
+                         M30,20 L50,40 M170,20 L150,40"/>
+            </g>
+        </defs>
+        <use href="#gema" transform="translate(20,120) rotate(-24 100 70) scale(1.35)"/>
+        <use href="#gema" transform="translate(205,175) rotate(14 100 70) scale(0.8)"/>
+        <use href="#gema" transform="translate(-30,200) rotate(-6 100 70) scale(0.6)"/>
+        <use href="#gema" transform="translate(690,105) rotate(22 100 70) scale(1.45)"/>
+        <use href="#gema" transform="translate(590,180) rotate(-16 100 70) scale(0.85)"/>
+        <use href="#gema" transform="translate(860,205) rotate(8 100 70) scale(0.62)"/>
+    </svg>
+</th:block>
+
 </body>
 </html>

@@ -121,14 +121,27 @@ class JogoServiceTest {
     }
 
     @Test
-    void errarPerdeOTicketENaoPodeGirar() {
+    void errarAindaGiraMasSemBonusDeChance() {
         RodadaView rodada = jogoService.comprarTicket(jogadorId, PREMIO_CARRO, Categoria.HISTORIA);
 
         ResultadoResposta resposta = jogoService.responder(jogadorId, rodada.id(), "A");
 
         assertThat(resposta.acertou()).isFalse();
         assertThat(resposta.respostaCorreta()).isEqualTo("B");
+        assertThat(resposta.chanceFinal()).as("sem bônus: chance base").isEqualTo(5);
         assertThat(saldo(jogadorId)).isEqualByComparingTo("800");
+
+        when(sorteador.sortear(PREMIO_CARRO, 5, 20)).thenReturn(PREMIO_BONUS_500);
+        ResultadoGiro giro = jogoService.girar(jogadorId, rodada.id());
+
+        assertThat(giro.ganhouPremioEscolhido()).isFalse();
+        assertThat(giro.saldo()).isEqualByComparingTo("1300");
+    }
+
+    @Test
+    void naoGiraAntesDeResponder() {
+        RodadaView rodada = jogoService.comprarTicket(jogadorId, PREMIO_CARRO, Categoria.HISTORIA);
+
         assertThatThrownBy(() -> jogoService.girar(jogadorId, rodada.id()))
                 .isInstanceOf(RegraDoJogoException.class);
     }
@@ -142,6 +155,7 @@ class JogoServiceTest {
 
         assertThat(resposta.acertou()).isFalse();
         assertThat(resposta.tempoEsgotado()).isTrue();
+        assertThat(resposta.chanceFinal()).isEqualTo(5);
     }
 
     @Test

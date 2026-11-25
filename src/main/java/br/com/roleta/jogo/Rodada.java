@@ -131,15 +131,21 @@ public class Rodada {
         this.finalizadaEm = agora;
     }
 
-    public void registrarErro(String resposta, Instant agora) {
+    /** Errou: ainda gira a roleta, mas só com a chance base (sem o bônus da IA). */
+    public void registrarErro(String resposta, int chanceBase, Instant agora) {
         this.respostaJogador = resposta;
-        this.status = StatusRodada.ERROU;
+        this.chanceFinal = chanceBase;
+        this.status = StatusRodada.LIBERADA_PARA_GIRO;
         this.finalizadaEm = agora;
     }
 
-    public void registrarTempoEsgotado(Instant agora) {
+    public void registrarTempoEsgotado(int chanceBase, Instant agora) {
         this.tempoEsgotado = true;
-        registrarErro(null, agora);
+        registrarErro(null, chanceBase, agora);
+    }
+
+    public boolean acertou() {
+        return respostaCorreta.equals(respostaJogador);
     }
 
     public void registrarGiro(int premioSorteado, BigDecimal valorGanho, String descricaoGanho, Instant agora) {
