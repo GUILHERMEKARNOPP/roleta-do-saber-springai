@@ -13,7 +13,6 @@
 <div class="palco" aria-hidden="true">
     <div class="roleta-moldura">
         <div id="roleta-decorativa" class="roleta roleta-decorativa"></div>
-        <th:block th:replace="~{fragmentos :: base-roleta}"></th:block>
     </div>
 </div>
 <ul id="premios-decorativos" hidden>
@@ -54,8 +53,6 @@
     </form>
     <p class="menu-descricao">Usuário: 3 a 30 caracteres (letras, números, ponto ou _). Senha: mínimo de 8 caracteres.</p>
 </main>
-
-<script th:src="@{/js/cenario.js}"></script>
 <script th:src="@{/js/roleta.js}"></script>
 <script th:src="@{/js/acesso.js}"></script>
 </body>
