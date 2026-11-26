@@ -143,3 +143,8 @@ src/main/resources
 - Sorteio feito no servidor com `SecureRandom`; o navegador só anima a roleta.
 - Content-Security-Policy restritiva e mensagens de erro genéricas para o cliente.
 - Chave da IA apenas em variável de ambiente.
+
+## Equipe
+
+- Guilherme Karnopp ([@GUILHERMEKARNOPP](https://github.com/GUILHERMEKARNOPP))
+- Cristiane Bruna dos Santos ([@Crisbsantos776](https://github.com/Crisbsantos776))
