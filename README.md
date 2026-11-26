@@ -150,3 +150,4 @@ src/main/resources
 - Cristiane Bruna dos Santos ([@Crisbsantos776](https://github.com/Crisbsantos776))
 - Marcos Jr ([@MarcosJr62](https://github.com/MarcosJr62))
 - Marcos Vinicius ([@marcosvinisants](https://github.com/marcosvinisants))
+- Rafael Rodris ([@RaphaelRodris](https://github.com/RaphaelRodris))
